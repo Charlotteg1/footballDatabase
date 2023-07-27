@@ -6,7 +6,7 @@ Each of the questions/tasks below can be answered using a `SELECT` query. When y
 
 ```sql
 <!-- Copy solution here -->
-
+SELECT * FROM matches WHERE season=2017; 
 
 ```
 
@@ -14,7 +14,7 @@ Each of the questions/tasks below can be answered using a `SELECT` query. When y
 
 ```sql
 <!-- Copy solution here -->
-
+SELECT * FROM matches WHERE hometeam='Barcelona' OR awayteam='Barcelona';
 
 ```
 
@@ -22,7 +22,7 @@ Each of the questions/tasks below can be answered using a `SELECT` query. When y
 
 ```sql
 <!-- Copy solution here -->
-
+SELECT DISTINCT name FROM divisions WHERE country='Scotland';
 
 ```
 
@@ -30,15 +30,14 @@ Each of the questions/tasks below can be answered using a `SELECT` query. When y
 
 ```sql
 <!-- Copy solution here -->
-
-
+SELECT count(*) as total_matches FROM matches WHERE division_code = (SELECT divisions.code FROM divisions WHERE divisions.name='Bundesliga') AND (awayteam='Freiburg' OR hometeam='Freiburg');
 ```
 
 5) Find the teams which include the word "City" in their name. 
 
 ```sql
 <!-- Copy solution here -->
-
+SELECT DISTINCT hometeam  FROM matches WHERE (LOWER(hometeam) LIKE LOWER('%City%'));
 
 ```
 
@@ -46,7 +45,7 @@ Each of the questions/tasks below can be answered using a `SELECT` query. When y
 
 ```sql
 <!-- Copy solution here -->
-
+SELECT count(DISTINCT hometeam) FROM matches WHERE division_code IN (SELECT divisions.code FROM divisions WHERE divisions.country='France');
 
 ```
 
@@ -54,7 +53,7 @@ Each of the questions/tasks below can be answered using a `SELECT` query. When y
 
 ```sql
 <!-- Copy solution here -->
-
+SELECT id, hometeam, awayteam, ftr, season FROM matches WHERE awayteam IN ('Huddersfield','Swansea') AND hometeam IN ('Swansea','Huddersfield') ORDER BY season DESC;
 
 ```
 
@@ -62,7 +61,7 @@ Each of the questions/tasks below can be answered using a `SELECT` query. When y
 
 ```sql
 <!-- Copy solution here -->
-
+SELECT count(*) FROM matches WHERE division_code in (SELECT divisions.code FROM divisions WHERE divisions.name='Eredivisie') AND ftr='D' AND season < 2016 AND season > 2009 ;
 
 ```
 
@@ -70,6 +69,7 @@ Each of the questions/tasks below can be answered using a `SELECT` query. When y
 
 ```sql
 <!-- Copy solution here -->
+SELECT id, hometeam, awayteam, fthg,ftag, SUM(fthg+ftag) AS total_goals FROM matches WHERE division_code=(SELECT divisions.code FROM divisions WHERE divisions.name='Premier League') GROUP BY id, hometeam, awayteam, fthg,ftag ORDER BY total_goals DESC,fthg DESC;
 
 
 ```
@@ -78,7 +78,8 @@ Each of the questions/tasks below can be answered using a `SELECT` query. When y
 
 ```sql
 <!-- Copy solution here -->
-
+SELECT season,division_code, MAX(mycount) AS total_goals FROM (SELECT division_code,season, SUM(fthg+ftag) as mycount FROM matches GROUP BY division_code, season order by division_code, season DESC) AS mycount GROUP BY division_code, season ORDER BY total_goals DESC 
+FETCH FIRST 1 ROWS ONLY;
 
 ```
 
