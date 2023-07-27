@@ -61,7 +61,7 @@ SELECT id, hometeam, awayteam, ftr, season FROM matches WHERE awayteam IN ('Hudd
 
 ```sql
 
-SELECT count(*) FROM matches WHERE division_code in (SELECT divisions.code FROM divisions WHERE divisions.name='Eredivisie') AND ftr='D' AND season < 2016 AND season > 2009 ;
+SELECT count(*) FROM matches WHERE division_code IN (SELECT divisions.code FROM divisions WHERE divisions.name='Eredivisie') AND ftr='D' AND season < 2016 AND season > 2009 ;
 
 ```
 
@@ -78,9 +78,10 @@ SELECT id, hometeam, awayteam, fthg,ftag, SUM(fthg+ftag) AS total_goals FROM mat
 
 ```sql
 
-SELECT season,division_code, MAX(mycount) AS total_goals FROM (SELECT division_code,season, SUM(fthg+ftag) as mycount FROM matches GROUP BY division_code, season order by division_code, season DESC) AS mycount GROUP BY division_code, season ORDER BY total_goals DESC 
-FETCH FIRST 1 ROWS ONLY;
+--SELECT season,division_code, MAX(mycount) AS total_goals FROM (SELECT division_code,season, SUM(fthg+ftag) as mycount FROM matches GROUP BY division_code, season order by division_code, --season DESC) AS mycount GROUP BY division_code, season ORDER BY total_goals DESC 
+--FETCH FIRST 1 ROWS ONLY;
 
+SELECT division_code,season, SUM(fthg+ftag) as total_goals FROM matches GROUP BY division_code, season order by total_goals DESC LIMIT 1;
 ```
 
 ### Useful Resources
